@@ -46,7 +46,6 @@ public class Logic
 		//		logger.debug(transaction.toString());
 
 		N = transaction.size();
-		logger.debug("N = "+N);
 		F =  (List<ItemSet>[] )new ArrayList[(int)N];
 
 		//populate the hash map
@@ -202,7 +201,8 @@ public class Logic
 				{
 					Item item2 = oneLevel.get(j);
 
-					if( ( item2.getCount()/N >= item.getMis() )  && (Math.abs( item2.getCount()/N - item.getCount()/N ) )  <= SDC)
+					if( ( item2.getCount()/N >= item.getMis() )  
+							&& this.roundOff( (Math.abs( item2.getCount()/N - item.getCount()/N ) ), 2)  <= SDC)
 						//if( ( item2.getCount()/N >= item.getMis() ))
 					{
 						two.add(createNewItemSet(item.getItemValue() + "," + item2.getItemValue()));
@@ -233,22 +233,11 @@ public class Logic
 
 				if(first.compareTo(second) == 0)
 				{
-					// debug code starts
-					
-					if(one.getItemSet().equals("5,1") && two.getItemSet().equals("5,2"))
-					{
-						int dfg = 0;
-					}
-					
-					// debug code ends
-					
 					String firstBreak[] = one.getItemSet().split(",");
 					String secondBreak[] = two.getItemSet().split(",");
-					
-					float crazy1 = ItemHash.get( firstBreak[firstBreak.length-1] ).getCount()/N;
-					float crazy2 = ItemHash.get( secondBreak[secondBreak.length-1] ).getCount()/N;
 
-					if( Math.abs( crazy1 -  crazy2   ) <= SDC )
+					if( this.roundOff( Math.abs(( ItemHash.get( firstBreak[firstBreak.length-1] ).getCount()/N ) - 
+							ItemHash.get( secondBreak[secondBreak.length-1] ).getCount()/N ), 2 ) <= SDC )
 					{
 
 						if ( ItemHash.get(firstBreak[firstBreak.length-1]).getOrder() <  ItemHash.get(secondBreak[secondBreak.length-1]).getOrder() )
@@ -273,6 +262,12 @@ public class Logic
 		F[levelNumber] = newLevel;
 	}
 
+	public float roundOff(float value, int precision) {
+		  float p = (float)Math.pow(10,precision);
+		  float temp = Math.round(value * p);
+		  return (float)temp/p;
+	}
+	
 	private ItemSet createNewItemSet(String newItemSet)
 	{
 		ItemSet itemSet = null;
