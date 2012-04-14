@@ -58,9 +58,12 @@ public class Logic
 		logger.debug("L = " +L);
 		generateF1(L);
 		logger.debug("F1 = " + F[0]);
+		
+		int count = 0;
 
 		for ( int i = 1; !F[i-1].isEmpty(); i++ )
 		{
+			
 			if( i == 1)
 			{
 				generateLevelTwo(L);
@@ -76,6 +79,7 @@ public class Logic
 			//			logger.debug("************************");
 			//			logger.debug(F[i].toString());
 
+			count++;
 		}
 
 
@@ -92,22 +96,27 @@ public class Logic
 
 			FileWriter fw = new FileWriter(file);
 
-			for( int i = 0 ; !F[i].isEmpty() ; i++)
-			{
-				fw.write("No. of length "+ (i+1) +" frequent itemsets: " + F[i].size());
-				fw.write("\n");
-				System.out.println("No. of length "+ (i+1) +" frequent itemsets: " + F[i].size());
 
-				for ( int j = 0 ; j < F[i].size() ; j++)
-				{
-					fw.write("{" + F[i].get(j).getItemSet() + "}: support-count=" +F[i].get(j).getCount());
+
+			for( int i = count ; i >=0 ; i--)
+			{
+
+				
+					fw.write("No. of length "+ (i+1) +" frequent itemsets: " + F[i].size());
 					fw.write("\n");
-					System.out.println("{" + F[i].get(j).getItemSet() + "}: support-count=" +F[i].get(j).getCount());
+					System.out.println("No. of length "+ (i+1) +" frequent itemsets: " + F[i].size());
+
+					for ( int j = 0 ; j < F[i].size() ; j++)
+					{
+						fw.write("{" + F[i].get(j).getItemSet() + "}: support-count=" +F[i].get(j).getCount());
+						fw.write("\n");
+						System.out.println("{" + F[i].get(j).getItemSet() + "}: support-count=" +F[i].get(j).getCount());
+					}
+					fw.write("\n");
 				}
-				fw.write("\n");
-			}
+
+				fw.close();
 			
-			fw.close();
 		}
 		catch(Exception e)
 		{
@@ -263,11 +272,11 @@ public class Logic
 	}
 
 	public float roundOff(float value, int precision) {
-		  float p = (float)Math.pow(10,precision);
-		  float temp = Math.round(value * p);
-		  return (float)temp/p;
+		float p = (float)Math.pow(10,precision);
+		float temp = Math.round(value * p);
+		return (float)temp/p;
 	}
-	
+
 	private ItemSet createNewItemSet(String newItemSet)
 	{
 		ItemSet itemSet = null;
